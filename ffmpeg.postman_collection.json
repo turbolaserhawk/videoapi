@@ -1,0 +1,117 @@
+{
+	"info": {
+		"_postman_id": "8a36ceb2-2fae-4f40-a8ed-baead73bb3a4",
+		"name": "ffmpeg",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "transcoding",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/transcode?data[0][video]=video/original.mp4&data[0][allow_crop]=yes&data[0][crop][top_bottom]=100&data[0][crop][left_right]=200&data[0][allow_cut]=yes&data[0][cut][from]=00:00:02&data[0][cut][to]=00:00:07&data[0][filter]=greyscale&data[0][rotate]=180&data[0][primary_watermark]=yes&data[0][pw][top]=10&data[0][pw][left]=10&data[0][random_watermark]=yes&data[0][rw][from]=2&data[0][rw][to]=6&data[0][full_watermark]=yes&data[0][fw][from]=3&data[0][fw][to]=4",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"transcode"
+					],
+					"query": [
+						{
+							"key": "data[0][video]",
+							"value": "video/original.mp4"
+						},
+						{
+							"key": "data[0][allow_crop]",
+							"value": "yes"
+						},
+						{
+							"key": "data[0][crop][top_bottom]",
+							"value": "100"
+						},
+						{
+							"key": "data[0][crop][left_right]",
+							"value": "200"
+						},
+						{
+							"key": "data[0][allow_cut]",
+							"value": "yes"
+						},
+						{
+							"key": "data[0][cut][from]",
+							"value": "00:00:02"
+						},
+						{
+							"key": "data[0][cut][to]",
+							"value": "00:00:07"
+						},
+						{
+							"key": "data[0][filter]",
+							"value": "greyscale"
+						},
+						{
+							"key": "data[0][rotate]",
+							"value": "180"
+						},
+						{
+							"key": "data[0][primary_watermark]",
+							"value": "yes"
+						},
+						{
+							"key": "data[0][pw][top]",
+							"value": "10"
+						},
+						{
+							"key": "data[0][pw][left]",
+							"value": "10"
+						},
+						{
+							"key": "data[0][random_watermark]",
+							"value": "yes"
+						},
+						{
+							"key": "data[0][rw][from]",
+							"value": "2"
+						},
+						{
+							"key": "data[0][rw][to]",
+							"value": "6"
+						},
+						{
+							"key": "data[0][full_watermark]",
+							"value": "yes"
+						},
+						{
+							"key": "data[0][fw][from]",
+							"value": "3"
+						},
+						{
+							"key": "data[0][fw][to]",
+							"value": "4"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
