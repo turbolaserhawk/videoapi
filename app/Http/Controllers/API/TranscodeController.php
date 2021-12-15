@@ -21,7 +21,6 @@ class TranscodeController extends Controller
             }else{
                 $cut = "";
             }
-            $fps = $detail['fps'];
             if ($detail['allow_crop'] == "yes"){
                 $left_right = $detail['crop']['left_right'];
                 $top_bottom = $detail['crop']['top_bottom'];
@@ -34,14 +33,12 @@ class TranscodeController extends Controller
             }elseif ($detail['rotate'] == 270){
                 $filter .= "transpose=3,";
             }*/
-            if ($detail['allow_resize'] == "yes"){
-                $width = $detail['resize']['width'];
-                $height = $detail['resize']['height'];
-                $filter .= "scale=$width:$height";
-            }
+            $width = $detail['output']['size']['width'];
+            $height = $detail['output']['size']['height'];
+            $filter .= "scale=$width:$height";
             $filter .= '"';
             $pre_vid = public_path("pre/".$out_name);
-            exec("$ffmpeg -y -r $fps -i $input $cut $filter $pre_vid 2> log.txt");
+            exec("$ffmpeg -y -i $input $cut $filter $pre_vid 2> log.txt");
             //watermarks
             $watermark_path = '';
             $overlay = '';
@@ -50,10 +47,23 @@ class TranscodeController extends Controller
                 $watermark_path .=  " -i ".public_path($watermark['path']);
                 $vid = 'vid'.$key;
                 $wm = 'wm'.$key;
-                $w_h = $watermark['h'];
-                $w_w = $watermark['w'];
-                $w_x = $watermark['x'];
-                $w_y = $watermark['y'];
+                $w_h = $watermark['height'];
+                $w_w = $watermark['width'];
+                $w_x = $watermark['offset']['x'];
+                $w_y = $watermark['offset']['y'];
+                if ($watermark['position'] == "top_left"){
+                    $position = $this->position_top_left($w_x,$w_y);
+                }elseif ($watermark['position'] == "top_right"){
+                    $position = $this->position_top_right($w_x,$w_y);
+                }elseif ($watermark['position'] == "bottom_left"){
+                    $position = $this->position_bottom_left($w_x,$w_y);
+                }elseif ($watermark['position'] == "bottom_right"){
+                    $position = $this->position_bottom_right($w_x,$w_y);
+                }elseif ($watermark['position'] == "center"){
+                    $position = $this->position_center($w_x,$w_y);
+                }else{
+                    $position = "$w_x:$w_y";
+                }
                 $water = $key+1;
                 if ($watermark['between'] == "yes"){
                     $b_from = $watermark['between_from'];
@@ -74,16 +84,19 @@ class TranscodeController extends Controller
                 }else{
                     $terminator = "[$out];";
                 }
-                $overlay .= "[$water][$in]scale2ref=w='iw*$w_w/100':h='ih*$w_h/100'[$wm][$vid];[$vid][$wm]overlay=$w_x:$w_y$between $terminator";
+                $overlay .= "[$water][$in]scale2ref=w='iw*$w_w/100':h='ih*$w_h/100'[$wm][$vid];[$vid][$wm]overlay=$position$between $terminator";
             }
-            $output = public_path("output/".$out_name);
-            $cmd = "ffmpeg -y -i $pre_vid $watermark_path -filter_complex \"$overlay\" $output 2> final.txt";
+            $format = $detail['output']['format'];
+            $output = public_path("output/".time().".".$format);
+            $bitrate = $detail['bitrate']."k";
+            $fps = $detail['output']['fps'];
+            $cmd = "ffmpeg -y -r $fps -i $pre_vid $watermark_path -filter_complex \"$overlay\" -b $bitrate -bufsize 4000k $output 2> final.txt";
             exec($cmd);
-            $size = array('width'=>$detail['resize']['width'],'height'=>$detail['resize']['height'],'fps'=>$detail['fps']);
-            $res = array('format'=>'mp4','size'=>$size);
-            return response()->json(['output'=>$res]);
         }
+        return response()->json(['output'=>'Transcoded successfully']);
         //exec("ffmpeg -y -i $pre -i logo.jpg -filter_complex \"[1][0]scale2ref=w='iw*100/100':h='ih*100/100'[wm][vid];[vid][wm]overlay=0:0:enable='between(t,2,4)'\" full.mp4");
+        //$size = array('width'=>$width,'height'=>$height,'fps'=>$fps);
+        //$res = array('format'=>$format,'size'=>$size);
 
     }
 }
