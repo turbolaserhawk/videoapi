@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\TranscodeController;
+use App\Http\Controllers\API\UserController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -14,8 +15,15 @@ use App\Http\Controllers\API\TranscodeController;
 |
 */
 
+Route::post('register', [UserController::class, 'register']);
+Route::post('login', [UserController::class, 'login']);
+
+Route::middleware('auth:sanctum')->group( function () {
+    //authorized routes
+    Route::get('/transcode',[TranscodeController::class,'index']);
+});
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/transcode',[TranscodeController::class,'index']);

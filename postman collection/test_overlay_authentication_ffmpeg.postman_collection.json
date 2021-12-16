@@ -1,0 +1,370 @@
+{
+	"info": {
+		"_postman_id": "8a36ceb2-2fae-4f40-a8ed-baead73bb3a4",
+		"name": "ffmpeg",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "transcoding",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "6|iyHMfmHw7NluWqWCJGSiqhd3ooqMPmndNIT5kl3V",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/transcode?data[0][video]=video/demo.mp4&data[0][bitrate]=4000&data[0][allow_crop]=no&data[0][crop][top_bottom]=150&data[0][crop][left_right]=50&data[0][allow_cut]=no&data[0][cut][from]=00:00:02&data[0][cut][to]=00:00:07&data[0][filter]=greyscale&data[0][iw][0][path]=watermark/start.png&data[0][iw][0][position]=top_left&data[0][iw][0][offset][x]=1&data[0][iw][0][offset][y]=-17&data[0][iw][0][height]=63&data[0][iw][0][width]=35&data[0][iw][0][between]=yes&data[0][iw][0][between_from]=0&data[0][iw][0][between_to]=4&data[0][iw][1][path]=watermark/right.png&data[0][iw][1][position]=bottom_right&data[0][iw][1][offset][x]=-100&data[0][iw][1][offset][y]=-100&data[0][iw][1][height]=40&data[0][iw][1][width]=25&data[0][iw][1][between]=no&data[0][text_overlay]=no&data[0][to][0][font_file]=font/font.ttf&data[0][to][0][font_size]=32&data[0][to][0][font_color]=%23000000&data[0][to][0][draw_text]=Intro text&data[0][to][0][position]=bottom_right&data[0][to][0][offset][x]=30&data[0][to][0][offset][y]=20&data[0][to][0][between]=yes&data[0][to][0][between_from]=3&data[0][to][0][between_to]=8&data[0][to][1][font_file]=font/font.ttf&data[0][to][1][font_size]=40&data[0][to][1][font_color]=red&data[0][to][1][draw_text]=i am red text&data[0][to][1][position]=top_left&data[0][to][1][offset][x]=30&data[0][to][1][offset][y]=20&data[0][to][1][between]=no&data[0][output][format]=mp4&data[0][output][aspectRatio]=19:6&data[0][output][size][width]=1080&data[0][output][size][height]=720&data[0][output][fps]=25&data[0][iw][2][path]=watermark/start.png&data[0][iw][2][position]=center&data[0][iw][2][offset][x]=10&data[0][iw][2][offset][y]=450&data[0][iw][2][height]=50&data[0][iw][2][width]=30&data[0][iw][2][between]=yes&data[0][iw][2][between_from]=70&data[0][iw][2][between_to]=84",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"transcode"
+					],
+					"query": [
+						{
+							"key": "data[0][video]",
+							"value": "video/demo.mp4"
+						},
+						{
+							"key": "data[0][bitrate]",
+							"value": "4000"
+						},
+						{
+							"key": "data[0][allow_crop]",
+							"value": "no"
+						},
+						{
+							"key": "data[0][crop][top_bottom]",
+							"value": "150"
+						},
+						{
+							"key": "data[0][crop][left_right]",
+							"value": "50"
+						},
+						{
+							"key": "data[0][allow_cut]",
+							"value": "no"
+						},
+						{
+							"key": "data[0][cut][from]",
+							"value": "00:00:02"
+						},
+						{
+							"key": "data[0][cut][to]",
+							"value": "00:00:07"
+						},
+						{
+							"key": "data[0][filter]",
+							"value": "greyscale"
+						},
+						{
+							"key": "data[0][iw][0][path]",
+							"value": "watermark/start.png"
+						},
+						{
+							"key": "data[0][iw][0][position]",
+							"value": "top_left"
+						},
+						{
+							"key": "data[0][iw][0][offset][x]",
+							"value": "1"
+						},
+						{
+							"key": "data[0][iw][0][offset][y]",
+							"value": "-17"
+						},
+						{
+							"key": "data[0][iw][0][height]",
+							"value": "63"
+						},
+						{
+							"key": "data[0][iw][0][width]",
+							"value": "35"
+						},
+						{
+							"key": "data[0][iw][0][between]",
+							"value": "yes"
+						},
+						{
+							"key": "data[0][iw][0][between_from]",
+							"value": "0"
+						},
+						{
+							"key": "data[0][iw][0][between_to]",
+							"value": "4"
+						},
+						{
+							"key": "data[0][iw][1][path]",
+							"value": "watermark/right.png"
+						},
+						{
+							"key": "data[0][iw][1][position]",
+							"value": "bottom_right"
+						},
+						{
+							"key": "data[0][iw][1][offset][x]",
+							"value": "-100"
+						},
+						{
+							"key": "data[0][iw][1][offset][y]",
+							"value": "-100"
+						},
+						{
+							"key": "data[0][iw][1][height]",
+							"value": "40"
+						},
+						{
+							"key": "data[0][iw][1][width]",
+							"value": "25"
+						},
+						{
+							"key": "data[0][iw][1][between]",
+							"value": "no"
+						},
+						{
+							"key": "data[0][text_overlay]",
+							"value": "no"
+						},
+						{
+							"key": "data[0][to][0][font_file]",
+							"value": "font/font.ttf"
+						},
+						{
+							"key": "data[0][to][0][font_size]",
+							"value": "32"
+						},
+						{
+							"key": "data[0][to][0][font_color]",
+							"value": "%23000000"
+						},
+						{
+							"key": "data[0][to][0][draw_text]",
+							"value": "Intro text"
+						},
+						{
+							"key": "data[0][to][0][position]",
+							"value": "bottom_right"
+						},
+						{
+							"key": "data[0][to][0][offset][x]",
+							"value": "30"
+						},
+						{
+							"key": "data[0][to][0][offset][y]",
+							"value": "20"
+						},
+						{
+							"key": "data[0][to][0][between]",
+							"value": "yes"
+						},
+						{
+							"key": "data[0][to][0][between_from]",
+							"value": "3"
+						},
+						{
+							"key": "data[0][to][0][between_to]",
+							"value": "8"
+						},
+						{
+							"key": "data[0][to][1][font_file]",
+							"value": "font/font.ttf"
+						},
+						{
+							"key": "data[0][to][1][font_size]",
+							"value": "40"
+						},
+						{
+							"key": "data[0][to][1][font_color]",
+							"value": "red"
+						},
+						{
+							"key": "data[0][to][1][draw_text]",
+							"value": "i am red text"
+						},
+						{
+							"key": "data[0][to][1][position]",
+							"value": "top_left"
+						},
+						{
+							"key": "data[0][to][1][offset][x]",
+							"value": "30"
+						},
+						{
+							"key": "data[0][to][1][offset][y]",
+							"value": "20"
+						},
+						{
+							"key": "data[0][to][1][between]",
+							"value": "no"
+						},
+						{
+							"key": "data[0][output][format]",
+							"value": "mp4"
+						},
+						{
+							"key": "data[0][output][aspectRatio]",
+							"value": "19:6"
+						},
+						{
+							"key": "data[0][output][size][width]",
+							"value": "1080"
+						},
+						{
+							"key": "data[0][output][size][height]",
+							"value": "720"
+						},
+						{
+							"key": "data[0][output][fps]",
+							"value": "25"
+						},
+						{
+							"key": "data[0][iw][2][path]",
+							"value": "watermark/start.png"
+						},
+						{
+							"key": "data[0][iw][2][position]",
+							"value": "center"
+						},
+						{
+							"key": "data[0][iw][2][offset][x]",
+							"value": "10"
+						},
+						{
+							"key": "data[0][iw][2][offset][y]",
+							"value": "450"
+						},
+						{
+							"key": "data[0][iw][2][height]",
+							"value": "50"
+						},
+						{
+							"key": "data[0][iw][2][width]",
+							"value": "30"
+						},
+						{
+							"key": "data[0][iw][2][between]",
+							"value": "yes"
+						},
+						{
+							"key": "data[0][iw][2][between_from]",
+							"value": "70"
+						},
+						{
+							"key": "data[0][iw][2][between_to]",
+							"value": "84"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "register",
+			"protocolProfileBehavior": {
+				"followOriginalHttpMethod": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/register?name=QRA&email=qra6666@gmail.com&password=password&c_password=password",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"register"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "QRA"
+						},
+						{
+							"key": "email",
+							"value": "qra6666@gmail.com"
+						},
+						{
+							"key": "password",
+							"value": "password"
+						},
+						{
+							"key": "c_password",
+							"value": "password"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/login?email=qra6666@gmail.com&password=password",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"login"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "qra6666@gmail.com"
+						},
+						{
+							"key": "password",
+							"value": "password"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
