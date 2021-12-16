@@ -43,7 +43,7 @@ class Controller extends BaseController
     public function text_position_center($w_x,$w_y){
         return "x=(w-text_w)/2-$w_x:y=(h-text_h)/2-$w_y";
     }
-    //validation functions
+    //response functions
     public function sendResponse($result, $message)
     {
         $response = [
@@ -59,13 +59,10 @@ class Controller extends BaseController
             'success' => false,
             'message' => $error,
         ];
-
-
         if(!empty($errorMessages)){
             $response['data'] = $errorMessages;
         }
-
-
         return response()->json($response, $code);
     }
+
 }

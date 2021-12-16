@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\Clip;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TranscodeController extends Controller
 {
@@ -11,14 +13,21 @@ class TranscodeController extends Controller
         set_time_limit(0);
         foreach ($request->data as $detail){
             $input = public_path($detail['video']);
+            //setting up cutting position
             if ($detail['allow_cut'] == "yes"){
                 $cut_from = $detail['cut']['from'];
                 $cut_to = $detail['cut']['to'];
                 $cut = "-ss $cut_from -to $cut_to";
-            }else{ $cut = ""; }
+            }else{
+                $cut = "";
+            }
+            //setting aspect ratio
+            $aspect = $detail['output']['aspectRatio'];
+            //setting resolution
             $width = $detail['output']['size']['width'];
             $height = $detail['output']['size']['height'];
-            $scale = ",scale=$width:$height";
+            $scale = ",setdar=$aspect,scale=$width:$height";
+            //crop setting
             if ($detail['allow_crop'] == "yes"){
                 $left_right = $detail['crop']['left_right'];
                 $top_bottom = $detail['crop']['top_bottom'];
@@ -31,7 +40,7 @@ class TranscodeController extends Controller
             }elseif ($detail['rotate'] == 270){
                 $filter .= "transpose=3,";
             }*/
-            //watermarks
+            //image watermarks/overlays setting
             $watermark_path = '';
             $watermark_overlay = '';
             $total_watermarks = count($detail['iw']);
@@ -43,6 +52,7 @@ class TranscodeController extends Controller
                 $w_w = $watermark['width'];
                 $w_x = $watermark['offset']['x'];
                 $w_y = $watermark['offset']['y'];
+                //position setting
                 if ($watermark['position'] == "top_left"){
                     $position = $this->position_top_left($w_x,$w_y);
                 }elseif ($watermark['position'] == "top_right"){
@@ -56,6 +66,7 @@ class TranscodeController extends Controller
                 }else{
                     $position = "$w_x:$w_y";
                 }
+                //enable/between setting
                 $water = $key+1;
                 if ($watermark['between'] == "yes"){
                     $b_from = $watermark['between_from'];
@@ -64,6 +75,7 @@ class TranscodeController extends Controller
                 }else{
                     $between = '';
                 }
+                //process setting
                 if ($key == 0){
                     if ($detail['allow_crop'] == "yes"){
                         $in = "c";
@@ -80,11 +92,14 @@ class TranscodeController extends Controller
                 }else{
                     $terminator = "[$out];";
                 }
+                //preparing command
                 $watermark_overlay .= "[$water][$in]scale2ref=w='iw*$w_w/100':h='ih*$w_h/100'[$wm][$vid];[$vid][$wm]overlay=$position$between $terminator";
             }
+            //text overlay setting
             $text_overlay = "";
             if ($detail['text_overlay'] == "yes"){
                 foreach ($detail['to'] as $key => $overlay){
+                    //basic setting
                     $font_file =  public_path($overlay['font_file']);
                     $font_size = $overlay['font_size'];
                     $font_color = $overlay['font_color'];
@@ -92,6 +107,7 @@ class TranscodeController extends Controller
                     $overlay_position = $overlay['position'];
                     $w_x = $overlay['offset']['x'];
                     $w_y = $overlay['offset']['y'];
+                    //position setting
                     if ($overlay_position == "top_left"){
                         $position = $this->text_position_top_left($w_x,$w_y);
                     }elseif ($overlay_position == "top_right"){
@@ -105,6 +121,7 @@ class TranscodeController extends Controller
                     }else{
                         $position = "$w_x:$w_y";
                     }
+                    //enable/between setting
                     if ($overlay['between'] == "yes"){
                         $b_from = $overlay['between_from'];
                         $b_to = $overlay['between_to'];
@@ -112,20 +129,23 @@ class TranscodeController extends Controller
                     }else{
                         $between = "";
                     }
+                    //preparing command
                     $text_overlay .= ",drawtext=fontsize=$font_size:fontcolor=$font_color:fontfile=$font_file:text=$draw_text:$position $between";
                 }
             }
+            //output setting
             $format = $detail['output']['format'];
             $output = public_path("output/".time().".".$format);
             $bitrate = $detail['bitrate']."k";
             $fps = $detail['output']['fps'];
-            $cmd = "ffmpeg -y -r $fps -i $input $cut $watermark_path -filter_complex \"$crop_scale$watermark_overlay$text_overlay\" -b $bitrate -crf 23 $output 2> final.txt";
+            //final command to execute
+            $cmd = "ffmpeg -y -r $fps -i $input $cut $watermark_path -filter_complex \"$crop_scale$watermark_overlay$text_overlay\" -b $bitrate -preset ultrafast -crf 23 $output 2> final.txt";
             exec($cmd);
+            $data = array('user_id'=>Auth::id(),'width'=>$width,'height'=>$height,'fps'=>$fps,'format'=>$format,'path'=>$output);
+            Clip::create($data);
+
         }
         return response()->json(['output'=>'Transcoded successfully']);
-        //exec("ffmpeg -y -i $pre -i logo.jpg -filter_complex \"[1][0]scale2ref=w='iw*100/100':h='ih*100/100'[wm][vid];[vid][wm]overlay=0:0:enable='between(t,2,4)'\" full.mp4");
-        //$size = array('width'=>$width,'height'=>$height,'fps'=>$fps);
-        //$res = array('format'=>$format,'size'=>$size);
 
     }
 }
