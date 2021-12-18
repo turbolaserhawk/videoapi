@@ -43,9 +43,26 @@ class TranscodeController extends Controller
             //image watermarks/overlays setting
             $watermark_path = '';
             $watermark_overlay = '';
-            $total_watermarks = count($detail['iw']);
-            foreach ($detail['iw'] as $key => $watermark){
-                $watermark_path .=  " -i ".public_path($watermark['path']);
+            $total_watermarks = count($detail['watermark']);
+            foreach ($detail['watermark'] as $key => $watermark){
+                $water = $key+1;
+                if ($watermark['transition'] == "yes"){
+                    $loop = " -loop 1 ";
+                    $watermark_out = "watermark_out".$water;
+                    //trim should be greater than fadeout time
+                    $fade_in_start = $watermark['transition_fadeIn_start'];
+                    $fade_in_duration =$watermark['transition_fadeIn_duration'];
+                    $fade_out_start = $watermark['transition_fadeOut_start'];
+                    $fade_out_duration = $watermark['transition_fadeOut_duration'];
+                    $trim_start = $fade_in_start -2;
+                    $trim_end = $fade_out_start + $fade_out_duration + 2;
+                    $transition = "[$water]trim=$trim_start:$trim_end,fade=in:st=$fade_in_start:d=$fade_in_duration:alpha=1,fade=out:st=$fade_out_start:d=$fade_out_duration:alpha=1,setpts=PTS+0/TB[$watermark_out];";
+                }else{
+                    $loop = "";
+                    $watermark_out = $water;
+                    $transition = "";
+                }
+                $watermark_path .=  "$loop -i ".public_path($watermark['path']);
                 $vid = 'vid'.$key;
                 $wm = 'wm'.$key;
                 $w_h = $watermark['height'];
@@ -67,7 +84,6 @@ class TranscodeController extends Controller
                     $position = "$w_x:$w_y";
                 }
                 //enable/between setting
-                $water = $key+1;
                 if ($watermark['between'] == "yes"){
                     $b_from = $watermark['between_from'];
                     $b_to = $watermark['between_to'];
@@ -93,12 +109,12 @@ class TranscodeController extends Controller
                     $terminator = "[$out];";
                 }
                 //preparing command
-                $watermark_overlay .= "[$water][$in]scale2ref=w='iw*$w_w/100':h='ih*$w_h/100'[$wm][$vid];[$vid][$wm]overlay=$position$between $terminator";
+                $watermark_overlay .= "$transition [$watermark_out][$in]scale2ref=w='iw*$w_w/100':h='ih*$w_h/100'[$wm][$vid];[$vid][$wm]overlay=$position$between $terminator";
             }
             //text overlay setting
             $text_overlay = "";
             if ($detail['text_overlay'] == "yes"){
-                foreach ($detail['to'] as $key => $overlay){
+                foreach ($detail['text'] as $key => $overlay){
                     //basic setting
                     $font_file =  public_path($overlay['font_file']);
                     $font_size = $overlay['font_size'];

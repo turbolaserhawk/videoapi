@@ -20,7 +20,7 @@ Route::post('login', [UserController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group( function () {
     //authorized routes
-    Route::get('/transcode',[TranscodeController::class,'index']);
+    Route::post('/transcode',[TranscodeController::class,'index']);
 });
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
